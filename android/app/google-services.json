@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "726987576670",
+    "project_id": "mad-cep-bookstore",
+    "storage_bucket": "mad-cep-bookstore.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:726987576670:android:9ea1ca21c2169f9b6febcf",
+        "android_client_info": {
+          "package_name": "com.example.keep_book_store"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxLXDTpiUeAbe-GnUPmXHQt2sBXLHLcHs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

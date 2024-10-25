@@ -1,22 +1,30 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 
 import 'book.dart';
 import 'book_detail_screen.dart';
 import 'cart_provider.dart';
 
-class BookItem extends StatelessWidget {
+class BookItem extends StatefulWidget {
   final Book book;
 
   const BookItem({super.key, required this.book});
 
+  @override
+  State<BookItem> createState() => _BookItemState();
+}
+
+class _BookItemState extends State<BookItem> {
+  final  store = FirebaseFirestore.instance.collection('books');
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (ctx) => BookDetailsScreen(book: book),
+            builder: (ctx) => BookDetailsScreen(book: widget.book),
           ),
         );
       },
@@ -34,7 +42,7 @@ class BookItem extends StatelessWidget {
                 ClipRRect(
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
                   child: Image.network(
-                    book.imageUrl,
+                    widget.book.imageUrl,
                     height: 150, // Adjust for size
                     width: double.infinity,
                     fit: BoxFit.fill,
@@ -43,7 +51,7 @@ class BookItem extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    book.title,
+                    widget.book.title,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -56,7 +64,7 @@ class BookItem extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Text(
-                    'by ${book.author}',
+                    'by ${widget.book.author}',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.blueGrey[500],
@@ -67,7 +75,7 @@ class BookItem extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    '\$${book.price}',
+                    '\$${widget.book.price}',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
@@ -81,15 +89,16 @@ class BookItem extends StatelessWidget {
               right: 8,
               bottom: 8,
               child: FloatingActionButton(
-                heroTag: book.id,
+                heroTag: widget.book.id,
                 mini: true,
                 backgroundColor: Colors.blueAccent,
-                onPressed: () {
+                onPressed: () async{
                   final cartProvider =
                       Provider.of<CartProvider>(context, listen: false);
-                  cartProvider.addToCart(book);
+                  cartProvider.addToCart(widget.book);
+                  await store.add({'id':widget.book.id,"title":widget.book.title,'author':widget.book.author,'imageUrl':widget.book.author,'price':widget.book.price});
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Added ${book.title} to Cart')),
+                    SnackBar(content: Text('Added ${widget.book.title} to Cart')),
                   );
                 },
                 child: const Icon(Icons.add_shopping_cart),
